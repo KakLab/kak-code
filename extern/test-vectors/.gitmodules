@@ -1,0 +1,6 @@
+[submodule "gen/extern/filecoin-ffi"]
+	path = gen/extern/filecoin-ffi
+	url = https://hub.fastgit.org/filecoin-project/filecoin-ffi.git
+[submodule "gen/extern/fil-blst"]
+	path = gen/extern/fil-blst
+	url = https://hub.fastgit.org/filecoin-project/fil-blst.git

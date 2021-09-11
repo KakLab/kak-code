@@ -1,0 +1,62 @@
+{
+  "v28-proof-of-spacetime-fallback-merkletree-poseidon_hasher-8-0-0-0170db1f394b35d995252228ee359194b13199d259380541dc529fb0099096b0.params": {
+    "cid": "d1fd8305e1c897710fbe07391e8298d6",
+    "digest": "d1fd8305e1c897710fbe07391e8298d6",
+    "sector_size": 2048
+  },
+  "v28-proof-of-spacetime-fallback-merkletree-poseidon_hasher-8-0-0-0170db1f394b35d995252228ee359194b13199d259380541dc529fb0099096b0.vk": {
+    "cid": "8bb6020a7df4013d113ec0ec0093fa81",
+    "digest": "8bb6020a7df4013d113ec0ec0093fa81",
+    "sector_size": 2048
+  },
+  "v28-proof-of-spacetime-fallback-merkletree-poseidon_hasher-8-0-0-0cfb4f178bbb71cf2ecfcd42accce558b27199ab4fb59cb78f2483fe21ef36d9.params": {
+    "cid": "99d2f908a8f1723c0c994b62c0e00b9d",
+    "digest": "99d2f908a8f1723c0c994b62c0e00b9d",
+    "sector_size": 536870912
+  },
+  "v28-proof-of-spacetime-fallback-merkletree-poseidon_hasher-8-0-0-0cfb4f178bbb71cf2ecfcd42accce558b27199ab4fb59cb78f2483fe21ef36d9.vk": {
+    "cid": "4ebb51c5ecd9bdc0ece037668f59197e",
+    "digest": "4ebb51c5ecd9bdc0ece037668f59197e",
+    "sector_size": 536870912
+  },
+  "v28-proof-of-spacetime-fallback-merkletree-poseidon_hasher-8-0-0-3ea05428c9d11689f23529cde32fd30aabd50f7d2c93657c1d3650bca3e8ea9e.params": {
+    "cid": "ff66957c7f4db081a2608ba33e7168d3",
+    "digest": "ff66957c7f4db081a2608ba33e7168d3",
+    "sector_size": 2048
+  },
+  "v28-proof-of-spacetime-fallback-merkletree-poseidon_hasher-8-0-0-3ea05428c9d11689f23529cde32fd30aabd50f7d2c93657c1d3650bca3e8ea9e.vk": {
+    "cid": "317256f68917652558761a06307ccffa",
+    "digest": "317256f68917652558761a06307ccffa",
+    "sector_size": 2048
+  },
+  "v28-proof-of-spacetime-fallback-merkletree-poseidon_hasher-8-0-0-7d739b8cf60f1b0709eeebee7730e297683552e4b69cab6984ec0285663c5781.params": {
+    "cid": "4780ca70b759666d59bda0029b9f31ff",
+    "digest": "4780ca70b759666d59bda0029b9f31ff",
+    "sector_size": 536870912
+  },
+  "v28-proof-of-spacetime-fallback-merkletree-poseidon_hasher-8-0-0-7d739b8cf60f1b0709eeebee7730e297683552e4b69cab6984ec0285663c5781.vk": {
+    "cid": "37f424f695817b6b34477b2ef3efa983",
+    "digest": "37f424f695817b6b34477b2ef3efa983",
+    "sector_size": 536870912
+  },
+  "v28-stacked-proof-of-replication-merkletree-poseidon_hasher-8-0-0-sha256_hasher-032d3138d22506ec0082ed72b2dcba18df18477904e35bafee82b3793b06832f.params": {
+    "cid": "444c21a69daaded8b77cc397a9584c30",
+    "digest": "444c21a69daaded8b77cc397a9584c30",
+    "sector_size": 2048
+  },
+  "v28-stacked-proof-of-replication-merkletree-poseidon_hasher-8-0-0-sha256_hasher-032d3138d22506ec0082ed72b2dcba18df18477904e35bafee82b3793b06832f.vk": {
+    "cid": "383911c23c72147099d088da4cc8090b",
+    "digest": "383911c23c72147099d088da4cc8090b",
+    "sector_size": 2048
+  },
+  "v28-stacked-proof-of-replication-merkletree-poseidon_hasher-8-0-0-sha256_hasher-6babf46ce344ae495d558e7770a585b2382d54f225af8ed0397b8be7c3fcd472.params": {
+    "cid": "c5bd016fa3b142fc3cc1af9d2a983317",
+    "digest": "c5bd016fa3b142fc3cc1af9d2a983317",
+    "sector_size": 536870912
+  },
+  "v28-stacked-proof-of-replication-merkletree-poseidon_hasher-8-0-0-sha256_hasher-6babf46ce344ae495d558e7770a585b2382d54f225af8ed0397b8be7c3fcd472.vk": {
+    "cid": "8c778d113fe94bd89ece87f85839d4dc",
+    "digest": "8c778d113fe94bd89ece87f85839d4dc",
+    "sector_size": 536870912
+  }
+}
