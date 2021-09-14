@@ -12,8 +12,8 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 )
 
-const BootstrappersFile = ""
-const GenesisFile = ""
+const BootstrappersFile = "kaknet.pi"
+const GenesisFile = "kaktest.car"
 
 var UpgradeBreezeHeight = abi.ChainEpoch(-1)
 
