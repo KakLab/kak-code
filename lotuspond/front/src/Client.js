@@ -31,13 +31,13 @@ class Client extends React.Component {
     super(props)
 
     this.state = {
-      miners: ['t0101'],
+      miners: ['k0101'],
       ask: { Price: '1000000000' }, // 2x min default ask to account for bin packing (could also do the math correctly below, but..)
 
       kbs: 1,
       blocks: 12,
       total: 36000,
-      miner: 't0101',
+      miner: 'k0101',
 
       deals: [],
 

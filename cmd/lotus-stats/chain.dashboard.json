@@ -1725,7 +1725,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "postfix": "KAK",
+      "postfix": "KAKH",
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "50%",
@@ -2858,7 +2858,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Cost of simple transfer [KAK]",
+      "title": "Cost of simple transfer [KAKH]",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2988,7 +2988,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Base Fee[KAK]",
+      "title": "Base Fee[KAKH]",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -3161,7 +3161,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Message Gas fees [KAK]",
+      "title": "Message Gas fees [KAKH]",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -3369,7 +3369,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Message Gas fees [KAK]",
+      "title": "Message Gas fees [KAKH]",
       "tooltip": {
         "shared": true,
         "sort": 0,

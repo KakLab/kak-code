@@ -18,7 +18,7 @@ var RootVerifierID address.Address
 
 func init() {
 
-	idk, err := address.NewFromString("t080")
+	idk, err := address.NewFromString("k080")
 	if err != nil {
 		panic(err)
 	}

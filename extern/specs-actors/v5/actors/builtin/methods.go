@@ -30,8 +30,7 @@ var MethodsReward = struct {
 	AwardBlockReward abi.MethodNum
 	ThisEpochReward  abi.MethodNum
 	UpdateNetworkKPI abi.MethodNum
-	StorageReward    abi.MethodNum
-}{MethodConstructor, 2, 3, 4, 5}
+}{MethodConstructor, 2, 3, 4}
 
 var MethodsMultisig = struct {
 	Constructor                 abi.MethodNum

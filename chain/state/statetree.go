@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	logging "github.com/ipfs/go-log/v2"
@@ -26,6 +25,7 @@ import (
 	states3 "github.com/filecoin-project/specs-actors/v3/actors/states"
 	states4 "github.com/filecoin-project/specs-actors/v4/actors/states"
 	states5 "github.com/filecoin-project/specs-actors/v4/actors/states"
+	states6 "github.com/filecoin-project/specs-actors/v6/actors/states"
 )
 
 var log = logging.Logger("statetree")
@@ -198,6 +198,12 @@ func NewStateTree(cst cbor.IpldStore, ver types.StateTreeVersion) (*StateTree, e
 			return nil, xerrors.Errorf("failed to create state tree: %w", err)
 		}
 		hamt = tree.Map
+	case types.StateTreeVersion5:
+		tree, err := states6.NewTree(store)
+		if err != nil {
+			return nil, xerrors.Errorf("failed to create state tree: %w", err)
+		}
+		hamt = tree.Map
 	default:
 		return nil, xerrors.Errorf("unsupported state tree version: %d", ver)
 	}
@@ -256,6 +262,12 @@ func LoadStateTree(cst cbor.IpldStore, c cid.Cid) (*StateTree, error) {
 	case types.StateTreeVersion4:
 		var tree *states5.Tree
 		tree, err = states5.LoadTree(store, root.Actors)
+		if tree != nil {
+			hamt = tree.Map
+		}
+	case types.StateTreeVersion5:
+		var tree *states6.Tree
+		tree, err = states6.LoadTree(store, root.Actors)
 		if tree != nil {
 			hamt = tree.Map
 		}

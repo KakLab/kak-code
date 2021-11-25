@@ -42,7 +42,7 @@ var ChainDisputeSetCmd = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "max-fee",
-			Usage: "Spend up to X KAK per DisputeWindowedPoSt message",
+			Usage: "Spend up to X KAKH per DisputeWindowedPoSt message",
 		},
 		&cli.StringFlag{
 			Name:  "from",

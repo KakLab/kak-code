@@ -39,7 +39,7 @@ var voteCmd = &cli.Command{
 var voteSendCmd = &cli.Command{
 	Name:      "send",
 	Usage:     "add vote",
-	ArgsUsage: "amount (KAK)",
+	ArgsUsage: "amount (KAKH)",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
@@ -56,7 +56,7 @@ var voteSendCmd = &cli.Command{
 
 		// get argument
 		if !cctx.Args().Present() {
-			return fmt.Errorf("must specify amount of KAK to vote")
+			return fmt.Errorf("must specify amount of KAKH to vote")
 		}
 		amount, err := strconv.ParseUint(cctx.Args().First(), 10, 64)
 		if err != nil {
@@ -103,7 +103,7 @@ var voteSendCmd = &cli.Command{
 var voteWithdrawCmd = &cli.Command{
 	Name:      "withdraw",
 	Usage:     "withdraw vote",
-	ArgsUsage: "amount (KAK)",
+	ArgsUsage: "amount (KAKH)",
 	Action: func(cctx *cli.Context) error {
 		api, closer, err := GetFullNodeAPI(cctx)
 		if err != nil {
@@ -186,7 +186,7 @@ var voteWithdrawCmd = &cli.Command{
 
 var voteStatusCmd = &cli.Command{
 	Name:      "status",
-	Usage:     "Get the vote status of kak system",
+	Usage:     "Get the vote status of kakh system",
 	ArgsUsage: "<sectorNum>",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{

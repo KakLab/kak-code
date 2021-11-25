@@ -41,6 +41,7 @@ import (
 	exported3 "github.com/filecoin-project/specs-actors/v3/actors/builtin/exported"
 	exported4 "github.com/filecoin-project/specs-actors/v4/actors/builtin/exported"
 	exported5 "github.com/filecoin-project/specs-actors/v5/actors/builtin/exported"
+	exported6 "github.com/filecoin-project/specs-actors/v6/actors/builtin/exported"
 )
 
 func GetNetworkName(ctx context.Context, sm *StateManager, st cid.Cid) (dtypes.NetworkName, error) {
@@ -584,6 +585,7 @@ func init() {
 	actors = append(actors, exported3.BuiltinActors()...)
 	actors = append(actors, exported4.BuiltinActors()...)
 	actors = append(actors, exported5.BuiltinActors()...)
+	actors = append(actors, exported6.BuiltinActors()...)
 
 	for _, actor := range actors {
 		exports := actor.Exports()
@@ -640,7 +642,7 @@ func GetReturnType(ctx context.Context, sm *StateManager, to address.Address, me
 
 	m, found := MethodsMap[act.Code][method]
 	if !found {
-		return nil, fmt.Errorf("unknown method %d for actor %s", method, act.Code)
+		return nil, fmt.Errorf("unknown method1 %d for actor %s", method, act.Code)
 	}
 	return reflect.New(m.Ret.Elem()).Interface().(cbg.CBORUnmarshaler), nil
 }
@@ -648,7 +650,7 @@ func GetReturnType(ctx context.Context, sm *StateManager, to address.Address, me
 func GetParamType(actCode cid.Cid, method abi.MethodNum) (cbg.CBORUnmarshaler, error) {
 	m, found := MethodsMap[actCode][method]
 	if !found {
-		return nil, fmt.Errorf("unknown method %d for actor %s", method, actCode)
+		return nil, fmt.Errorf("unknown method 2%d for actor %s", method, actCode)
 	}
 	return reflect.New(m.Params.Elem()).Interface().(cbg.CBORUnmarshaler), nil
 }

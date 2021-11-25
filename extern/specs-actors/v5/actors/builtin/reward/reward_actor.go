@@ -2,7 +2,6 @@ package reward
 
 import (
 "fmt"
-	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/go-state-types/cbor"
@@ -27,7 +26,6 @@ func (a Actor) Exports() []interface{} {
 		2:                         a.AwardBlockReward,
 		3:                         a.ThisEpochReward,
 		4:                         a.UpdateNetworkKPI,
-		5:                         a.StorageReward,
 	}
 }
 
@@ -65,10 +63,6 @@ func (a Actor) Constructor(rt runtime.Runtime, currRealizedPower *abi.StoragePow
 //}
 type AwardBlockRewardParams = reward0.AwardBlockRewardParams
 
-type AwardStorageRewardParams struct {
-	Miner     address.Address
-	Reward   abi.TokenAmount // reward
-}
 // Awards a reward to a block producer.
 // This method is called only by the system actor, implicitly, as the last message in the evaluation of a block.
 // The system actor thus computes the parameters and attached value.
@@ -124,6 +118,7 @@ func (a Actor) AwardBlockReward(rt runtime.Runtime, params *AwardBlockRewardPara
 	builtin.RequireState(rt, totalReward.LessThanEqual(priorBalance), "reward %v exceeds balance %v", totalReward, priorBalance)
 
 	fmt.Println("totalReward:",totalReward, "to：", minerAddr.String())
+	fmt.Printf("reward state------------ %+v\n",st)
 
 	// if this fails, we can assume the miner is responsible and avoid failing here.
 	rewardParams := builtin.ApplyRewardParams{
@@ -186,49 +181,5 @@ func (a Actor) UpdateNetworkKPI(rt runtime.Runtime, currRealizedPower *abi.Stora
 		// only update smoothed estimates after updating reward and epoch
 		st.updateSmoothedEstimates(st.Epoch - prev)
 	})
-	return nil
-}
-
-// Awards a reward to a block producer.
-// This method is called only by the system actor, implicitly, as the last message in the evaluation of a block.
-// The system actor thus computes the parameters and attached value.
-//
-// The reward includes two components:
-// - the epoch block reward, computed and paid from the reward actor's balance,
-// - the block gas reward, expected to be transferred to the reward actor with this invocation.
-//
-// The reward is reduced before the residual is credited to the block producer, by:
-// - a penalty amount, provided as a parameter, which is burnt,
-func (a Actor) StorageReward(rt runtime.Runtime, params *AwardStorageRewardParams) *abi.EmptyValue {
-
-	// get miner list
-	rt.ValidateImmediateCallerAcceptAny()
-	minerAddr, ok := rt.ResolveAddress(params.Miner)
-	if !ok {
-		rt.Abortf(exitcode.ErrNotFound, "failed to resolve given owner address")
-	}
-	// The miner penalty is scaled up by a factor of PenaltyMultiplier
-	totalReward := big.Zero()
-	var st State
-	rt.StateTransaction(&st, func() {
-
-	})
-
-	// if this fails, we can assume the miner is responsible and avoid failing here.
-	rewardParams := builtin.ApplyRewardParams{
-		Reward:  params.Reward,
-		Penalty: big.Zero(),
-	}
-	totalReward =  big.Add(params.Reward , big.NewInt(1000000000000))
-	code := rt.Send(minerAddr, builtin.MethodsMiner.ApplyRewards, &rewardParams, totalReward, &builtin.Discard{})
-	//code := rt.Send(minerAddr, builtin.MethodSend, nil, rewardParams.Reward, &builtin.Discard{})
-	if !code.IsSuccess() {
-		rt.Log(rtt.ERROR, "failed to send ApplyRewards call to the miner actor with funds: %v, code: %v", totalReward, code)
-		code := rt.Send(builtin.BurntFundsActorAddr, builtin.MethodSend, nil, totalReward, &builtin.Discard{})
-		if !code.IsSuccess() {
-			rt.Log(rtt.ERROR, "failed to send unsent reward to the burnt funds actor, code: %v", code)
-		}
-	}
-
 	return nil
 }

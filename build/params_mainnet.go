@@ -64,6 +64,7 @@ var UpgradeActorsV4Height = abi.ChainEpoch(712320)
 
 // for kak system
 var UpgradeActorsV5Height = abi.ChainEpoch(712322)
+var UpgradeActorsV6Height = abi.ChainEpoch(712325)
 
 
 func init() {

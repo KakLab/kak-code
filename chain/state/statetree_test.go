@@ -258,7 +258,7 @@ func TestSnapshots(t *testing.T) {
 
 	var addrs []address.Address
 	//for _, a := range []string{"t15ocrptbu4i5qucjvvwecihd7fqqgzb27pz5l5zy", "t1dpyvgavvl3f4ujlk6odedss54z6rt5gyuknsuva", "t1feiejbkcvozy7iltt2pxzuoq4d2kpbsusugan7a", "t3rgjfqybjx7bahuhfv7nwfg3tlm4i4zyvldfirjvzm5z5xwjoqbj3rfi2mpmlxpqwxxxafgpkjilqzpg7cefa"} {
-	for _, a := range []string{"t0100", "t0101", "t0102", "t0103"} {
+	for _, a := range []string{"k0100", "k0101", "k0102", "k0103"} {
 		addr, err := address.NewFromString(a)
 		if err != nil {
 			t.Fatal(err)

@@ -87,7 +87,6 @@ func main() {
 		// method params and returns
 		//reward.AwardBlockRewardParams{}, // Aliased from v0
 		reward.ThisEpochRewardReturn{},
-		reward.AwardStorageRewardParams{},
 	); err != nil {
 		panic(err)
 	}
@@ -200,6 +199,8 @@ func main() {
 		miner.VestingFund{},
 		miner.WindowedPoSt{},
 		miner.AddPosParams{},
+		miner.PosVestingFunds{},
+		miner.PosVestingFund{},
 		// method params and returns
 		// miner.ConstructorParams{}, // in power actor
 		//miner.SubmitWindowedPoStParams{}, // Aliased from v0

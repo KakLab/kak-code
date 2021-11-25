@@ -2,7 +2,6 @@ package power
 
 import (
 	"bytes"
-
 	addr "github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -230,11 +229,15 @@ func (a Actor) OnEpochTickEnd(rt Runtime, _ *abi.EmptyValue) *abi.EmptyValue {
 		st.updateSmoothedEstimate(abi.ChainEpoch(1))
 	})
 
+	FilecoinPrecision := int64(1_000_000_000_000_000_000)
+	pos := big.Div(st.TotalPos, big.NewInt(FilecoinPrecision))
+
 	// update network KPI in RewardActor
 	code := rt.Send(
 		builtin.RewardActorAddr,
 		builtin.MethodsReward.UpdateNetworkKPI,
-		&st.ThisEpochRawBytePower,
+		//&st.ThisEpochRawBytePower,
+		&pos,
 		abi.NewTokenAmount(0),
 		&builtin.Discard{},
 	)

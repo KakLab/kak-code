@@ -138,7 +138,7 @@ var sealBenchCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "miner-addr",
 			Usage: "pass miner address (only necessary if using existing sectorbuilder)",
-			Value: "t01000",
+			Value: "k01000",
 		},
 		&cli.StringFlag{
 			Name:  "benchmark-existing-sectorbuilder",
@@ -713,7 +713,7 @@ var proveCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "miner-addr",
 			Usage: "pass miner address (only necessary if using existing sectorbuilder)",
-			Value: "t01000",
+			Value: "k01000",
 		},
 	},
 	Action: func(c *cli.Context) error {

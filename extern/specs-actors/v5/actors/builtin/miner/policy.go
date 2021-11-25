@@ -36,6 +36,10 @@ const WPoStPeriodDeadlines = uint64(48) // PARAM_SPEC
 // So, to support upto 10Eib storage, we set this to 3000.
 const MaxPartitionsPerDeadline = 3000
 
+const PosVestPeriod = abi.ChainEpoch(builtin.EpochsInDay * 90) // pos vest period
+//const PosVestPeriod = abi.ChainEpoch(100) // pos vest period
+const FilecoinPrecision = int64(1_000_000_000_000_000_000)
+
 func init() {
 	// Check that the challenge windows divide the proving period evenly.
 	if WPoStProvingPeriod%WPoStChallengeWindow != 0 {

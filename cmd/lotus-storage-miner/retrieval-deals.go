@@ -166,7 +166,7 @@ var retrievalSetAskCmd = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "price",
-			Usage: "Set the price of the ask for retrievals (KAK/GiB)",
+			Usage: "Set the price of the ask for retrievals (KAKH/GiB)",
 		},
 		&cli.StringFlag{
 			Name:  "unseal-price",

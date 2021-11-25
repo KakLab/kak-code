@@ -1,6 +1,11 @@
 package policy
 
 import (
+	builtin6 "github.com/filecoin-project/specs-actors/v6/actors/builtin"
+	market6 "github.com/filecoin-project/specs-actors/v6/actors/builtin/market"
+	miner6 "github.com/filecoin-project/specs-actors/v6/actors/builtin/miner"
+	verifreg6 "github.com/filecoin-project/specs-actors/v6/actors/builtin/verifreg"
+
 	builtin5 "github.com/filecoin-project/specs-actors/v5/actors/builtin"
 	market5 "github.com/filecoin-project/specs-actors/v5/actors/builtin/market"
 	miner5 "github.com/filecoin-project/specs-actors/v5/actors/builtin/miner"
@@ -63,6 +68,10 @@ func SetSupportedProofTypes(types ...abi.RegisteredSealProof) {
 	miner5.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	miner5.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
 	miner5.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
+
+	miner6.PreCommitSealProofTypesV0 = make(map[abi.RegisteredSealProof]struct{}, len(types))
+	miner6.PreCommitSealProofTypesV7 = make(map[abi.RegisteredSealProof]struct{}, len(types)*2)
+	miner6.PreCommitSealProofTypesV8 = make(map[abi.RegisteredSealProof]struct{}, len(types))
 	AddSupportedProofTypes(types...)
 }
 
@@ -95,6 +104,11 @@ func AddSupportedProofTypes(types ...abi.RegisteredSealProof) {
 		miner5.PreCommitSealProofTypesV7[t] = struct{}{}
 		miner5.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 		miner5.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
+
+		miner6.PreCommitSealProofTypesV0[t] = struct{}{}
+		miner6.PreCommitSealProofTypesV7[t] = struct{}{}
+		miner6.PreCommitSealProofTypesV7[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
+		miner6.PreCommitSealProofTypesV8[t+abi.RegisteredSealProof_StackedDrg2KiBV1_1] = struct{}{}
 	}
 }
 
@@ -107,6 +121,7 @@ func SetPreCommitChallengeDelay(delay abi.ChainEpoch) {
 	miner3.PreCommitChallengeDelay = delay
 	miner4.PreCommitChallengeDelay = delay
 	miner5.PreCommitChallengeDelay = delay
+	miner6.PreCommitChallengeDelay = delay
 }
 
 // TODO: this function shouldn't really exist. Instead, the API should expose the precommit delay.
@@ -133,6 +148,9 @@ func SetConsensusMinerMinPower(p abi.StoragePower) {
 	for _, policy := range builtin5.PoStProofPolicies {
 		policy.ConsensusMinerMinPower = p
 	}
+	for _, policy := range builtin6.PoStProofPolicies {
+		policy.ConsensusMinerMinPower = p
+	}
 }
 
 // SetMinVerifiedDealSize sets the minimum size of a verified deal. This should
@@ -143,6 +161,7 @@ func SetMinVerifiedDealSize(size abi.StoragePower) {
 	verifreg3.MinVerifiedDealSize = size
 	verifreg4.MinVerifiedDealSize = size
 	verifreg5.MinVerifiedDealSize = size
+	verifreg6.MinVerifiedDealSize = size
 }
 
 func GetMaxProveCommitDuration(ver actors.Version, t abi.RegisteredSealProof) abi.ChainEpoch {
@@ -157,6 +176,8 @@ func GetMaxProveCommitDuration(ver actors.Version, t abi.RegisteredSealProof) ab
 		return miner4.MaxProveCommitDuration[t]
 	case actors.Version5:
 		return miner5.MaxProveCommitDuration[t]
+	case actors.Version6:
+		return miner6.MaxProveCommitDuration[t]
 	default:
 		panic("unsupported actors version")
 	}
@@ -178,6 +199,8 @@ func DealProviderCollateralBounds(
 		return market4.DealProviderCollateralBounds(size, verified, rawBytePower, qaPower, baselinePower, circulatingFil)
 	case actors.Version5:
 		return market5.DealProviderCollateralBounds(size, verified, rawBytePower, qaPower, baselinePower, circulatingFil)
+	case actors.Version6:
+		return market6.DealProviderCollateralBounds(size, verified, rawBytePower, qaPower, baselinePower, circulatingFil)
 	default:
 		panic("unsupported actors version")
 	}
@@ -209,6 +232,10 @@ func SetWPoStChallengeWindow(period abi.ChainEpoch) {
 	miner5.WPoStChallengeWindow = period
 	miner5.WPoStProvingPeriod = period * abi.ChainEpoch(miner4.WPoStPeriodDeadlines)
 	miner5.WPoStDisputeWindow = period * 30 // see the miner3 comment
+
+	miner6.WPoStChallengeWindow = period
+	miner6.WPoStProvingPeriod = period * abi.ChainEpoch(miner4.WPoStPeriodDeadlines)
+	miner6.WPoStDisputeWindow = period * 30 // see the miner3 comment
 }
 
 func GetWinningPoStSectorSetLookback(nwVer network.Version) abi.ChainEpoch {
@@ -271,6 +298,8 @@ func GetAddressedSectorsMax(nwVer network.Version) int {
 		return miner4.AddressedSectorsMax
 	case actors.Version5:
 		return miner5.AddressedSectorsMax
+	case actors.Version6:
+		return miner6.AddressedSectorsMax
 	default:
 		panic("unsupported network version")
 	}
@@ -289,6 +318,8 @@ func GetDeclarationsMax(nwVer network.Version) int {
 		return miner4.DeclarationsMax
 	case actors.Version5:
 		return miner5.DeclarationsMax
+	case actors.Version6:
+		return miner6.DeclarationsMax
 	default:
 		panic("unsupported network version")
 	}

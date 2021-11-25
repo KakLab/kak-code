@@ -634,15 +634,17 @@ func (a Actor) DisputeWindowedPoSt(rt Runtime, params *DisputeWindowedPoStParams
 func (a Actor) AddPos(rt Runtime, params *AddPosParams) *abi.EmptyValue {
 	rt.ValidateImmediateCallerAcceptAny()
 
-	code := rt.Send(builtin.BurntFundsActorAddr, builtin.MethodSend, nil, params.Pos, &builtin.Discard{})
+	code := rt.Send(rt.Receiver(), builtin.MethodSend, nil, params.Pos, &builtin.Discard{})
 	if !code.IsSuccess() {
 		rt.Log(rtt.ERROR, "failed to burn the pos funds, code: %v", code)
 	}
 
 	var st State
+	store := adt.AsStore(rt)
 	rt.StateTransaction(&st, func() {
 		// update st
-		st.PosDeposits = big.Add(st.PosDeposits, params.Pos)
+		_, err := st.AddPosLockedFunds(store, rt.CurrEpoch(), params.Pos)
+		builtin.RequireNoErr(rt, err, exitcode.ErrIllegalState, "failed to add pos vest")
 	})
 
 	code = rt.Send(
@@ -659,26 +661,28 @@ func (a Actor) AddPos(rt Runtime, params *AddPosParams) *abi.EmptyValue {
 // withdraw pos
 func (a Actor) WithdrawPos(rt Runtime, params *WithdrawBalanceParams) *abi.EmptyValue {
 	rt.ValidateImmediateCallerAcceptAny()
-	availableBalance := big.Zero()
-
-	// update miner state
-	var st State
-	rt.StateTransaction(&st, func() {
-		// update st
-		availableBalance = st.PosDeposits
-		st.PosDeposits = big.Sub(st.PosDeposits, params.AmountRequested)
-	})
-
-	// send to miner owner
 	if params.AmountRequested.LessThan(big.Zero()) {
 		rt.Abortf(exitcode.ErrIllegalArgument, "negative fund requested for withdrawal: %s", params.AmountRequested)
 	}
-	code := rt.Send(rt.Caller(), builtin.MethodSend, nil, params.AmountRequested, &builtin.Discard{})
+
+	availableBalance := big.Zero()
+	// update miner state
+	var st State
+	store := adt.AsStore(rt)
+	rt.StateTransaction(&st, func() {
+		// update st
+		amount, err := st.UnlockPosUnvestedFunds(store, rt.CurrEpoch(), params.AmountRequested)
+		availableBalance = amount
+		builtin.RequireNoErr(rt, err, exitcode.ErrIllegalState, "failed to UnlockPosUnvestedFunds")
+	})
+
+	// send to miner owner
+	code := rt.Send(rt.Caller(), builtin.MethodSend, nil, availableBalance, &builtin.Discard{})
 	if !code.IsSuccess() {
-		rt.Log(rtt.ERROR, "failed to burn the pos funds, code: %v", code)
+		rt.Log(rtt.ERROR, "failed to withdraw pos funds, code: %v", code)
 	}
 
-	params.AmountRequested = params.AmountRequested.Neg()
+	params.AmountRequested = availableBalance.Neg()
 	// update pospower of power
 	code = rt.Send(
 		builtin.StoragePowerActorAddr,

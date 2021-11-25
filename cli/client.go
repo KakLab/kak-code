@@ -307,7 +307,7 @@ var clientDealCmd = &cli.Command{
 	Description: `Make a deal with a miner.
 dataCid comes from running 'lotus client import'.
 miner is the address of the miner you wish to make a deal with.
-price is measured in KAK/GB/Epoch. Miners usually don't accept a bid
+price is measured in KAKH/GB/Epoch. Miners usually don't accept a bid
 lower than their advertised ask. You can check a miners listed price
 with 'lotus client query-ask <miner address>'.
 duration is how long the miner should store the data for, in blocks.
@@ -714,7 +714,7 @@ uiLoop:
 			if latStr != "" {
 				maxMs, err := strconv.ParseInt(latStr, 10, 64)
 				if err != nil {
-					printErr(xerrors.Errorf("parsing KAK: %w", err))
+					printErr(xerrors.Errorf("parsing KAKH: %w", err))
 					continue uiLoop
 				}
 
@@ -739,7 +739,7 @@ uiLoop:
 			state = "find-budget"
 		case "find-budget":
 			afmt.Printf("Proposing from %s, Current Balance: %s\n", a, types.FIL(fromBal))
-			afmt.Print("Maximum budget (KAK): ") // TODO: Propose some default somehow?
+			afmt.Print("Maximum budget (KAKH): ") // TODO: Propose some default somehow?
 
 			_budgetStr, _, err := rl.ReadLine()
 			budgetStr := string(_budgetStr)
@@ -750,7 +750,7 @@ uiLoop:
 
 			budget, err = types.ParseFIL(budgetStr)
 			if err != nil {
-				printErr(xerrors.Errorf("parsing KAK: %w", err))
+				printErr(xerrors.Errorf("parsing KAKH: %w", err))
 				continue uiLoop
 			}
 
@@ -1031,7 +1031,7 @@ var clientRetrieveCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:  "maxPrice",
-			Usage: fmt.Sprintf("maximum price the client is willing to consider (default: %s KAK)", DefaultMaxRetrievePrice),
+			Usage: fmt.Sprintf("maximum price the client is willing to consider (default: %s KAKH)", DefaultMaxRetrievePrice),
 		},
 		&cli.StringFlag{
 			Name:  "pieceCid",

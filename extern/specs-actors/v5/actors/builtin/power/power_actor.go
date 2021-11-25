@@ -2,8 +2,6 @@ package power
 
 import (
 	"bytes"
-	"github.com/filecoin-project/specs-actors/v5/actors/builtin/reward"
-
 	addr "github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
@@ -22,7 +20,7 @@ import (
 )
 
 type Runtime = runtime.Runtime
-const FilecoinPrecision = uint64(1_000_000_000_000_000_000)
+
 type SectorTermination int64
 
 const (
@@ -217,7 +215,6 @@ func (a Actor) OnEpochTickEnd(rt Runtime, _ *abi.EmptyValue) *abi.EmptyValue {
 
 	a.processBatchProofVerifies(rt)
 	a.processDeferredCronEvents(rt)
-	a.processStorageReward(rt)
 
 	var st State
 	rt.StateTransaction(&st, func() {
@@ -232,11 +229,15 @@ func (a Actor) OnEpochTickEnd(rt Runtime, _ *abi.EmptyValue) *abi.EmptyValue {
 		st.updateSmoothedEstimate(abi.ChainEpoch(1))
 	})
 
+	FilecoinPrecision := int64(1_000_000_000_000_000_000)
+	pos := big.Div(st.TotalPos, big.NewInt(FilecoinPrecision))
+
 	// update network KPI in RewardActor
 	code := rt.Send(
 		builtin.RewardActorAddr,
 		builtin.MethodsReward.UpdateNetworkKPI,
-		&st.ThisEpochRawBytePower,
+		//&st.ThisEpochRawBytePower,
+		&pos,
 		abi.NewTokenAmount(0),
 		&builtin.Discard{},
 	)
@@ -448,44 +449,6 @@ func (a Actor) processBatchProofVerifies(rt Runtime) {
 				abi.NewTokenAmount(0),
 				&builtin.Discard{},
 			)
-		}
-	}
-}
-
-func (a Actor) processStorageReward(rt Runtime) {
-	var st State
-	rt.StateTransaction(&st, func() {
-	})
-	// get miners and miners info
-	miners := make(map[addr.Address]Claim)
-	store := adt.AsStore(rt)
-	claims, err := adt.AsMap(store, st.Claims, builtin.DefaultHamtBitwidth)
-	builtin.RequireNoErr(rt, err, exitcode.ErrIllegalState, "failed to get adt map")
-
-	var claim Claim
-	err = claims.ForEach(&claim, func(k string) error {
-		a, err := addr.NewFromBytes([]byte(k))
-		if err != nil {
-			return err
-		}
-		c := claim
-		miners[a] = c
-		return nil
-	})
-	builtin.RequireNoErr(rt, err, exitcode.ErrIllegalState, "failed to get miners")
-
-	for mineraddr, _ := range miners {
-		rewardParams := reward.AwardStorageRewardParams{
-			Miner:     mineraddr,
-			Reward: big.Mul(big.NewInt(300), big.NewInt(int64(FilecoinPrecision))),
-		}
-		code := rt.Send(builtin.RewardActorAddr, builtin.MethodsReward.StorageReward, &rewardParams, big.Zero(), &builtin.Discard{})
-		if !code.IsSuccess() {
-			rt.Log(rtt.ERROR, "failed to send ApplyRewards call to the miner actor with funds: %v, code: %v", rewardParams.Reward, code)
-			code := rt.Send(builtin.BurntFundsActorAddr, builtin.MethodSend, nil, rewardParams.Reward, &builtin.Discard{})
-			if !code.IsSuccess() {
-				rt.Log(rtt.ERROR, "failed to send unsent reward to the burnt funds actor, code: %v", code)
-			}
 		}
 	}
 }

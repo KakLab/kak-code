@@ -48,7 +48,7 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 					continue
 				}
 
-				fmt.Printf("init set %s t0%d\n", e, counter)
+				fmt.Printf("init set %s k0%d\n", e, counter)
 
 				value := cbg.CborInt(counter)
 				if err := amap.Put(abi.AddrKey(e), &value); err != nil {
@@ -75,7 +75,7 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 			return 0, nil, nil, xerrors.Errorf("unmarshaling account meta: %w", err)
 		}
 
-		fmt.Printf("init set %s t0%d\n", ainfo.Owner, counter)
+		fmt.Printf("init set %s k0%d\n", ainfo.Owner, counter)
 
 		value := cbg.CborInt(counter)
 		if err := amap.Put(abi.AddrKey(ainfo.Owner), &value); err != nil {
@@ -99,7 +99,7 @@ func SetupInitActor(bs bstore.Blockstore, netname string, initialActors []genesi
 			if _, ok := keyToId[e]; ok {
 				continue
 			}
-			fmt.Printf("init set %s t0%d\n", e, counter)
+			fmt.Printf("init set %s k0%d\n", e, counter)
 
 			value := cbg.CborInt(counter)
 			if err := amap.Put(abi.AddrKey(e), &value); err != nil {

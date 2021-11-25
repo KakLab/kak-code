@@ -26,12 +26,12 @@ var sendCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:  "gas-premium",
-			Usage: "specify gas price to use in AttoKAK",
+			Usage: "specify gas price to use in AttoKAKH",
 			Value: "0",
 		},
 		&cli.StringFlag{
 			Name:  "gas-feecap",
-			Usage: "specify gas fee cap to use in AttoKAK",
+			Usage: "specify gas fee cap to use in AttoKAKH",
 			Value: "0",
 		},
 		&cli.Int64Flag{

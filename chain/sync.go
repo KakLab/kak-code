@@ -868,7 +868,7 @@ func (syncer *Syncer) ValidateBlock(ctx context.Context, b *types.FullBlock, use
 
 		//j := h.ElectionProof.ComputeWinCount(mpow.QualityAdjPower, tpow.QualityAdjPower)
 		j := h.ElectionProof.ComputeWinCount(mpow.PosPower, ppow)
-		fmt.Println("--------------------",mpow.PosPower.String(),ppow.String(),j)
+		//fmt.Println("--------------------",mpow.PosPower.String(),ppow.String(),j)
 
 		if h.ElectionProof.WinCount != j {
 			return xerrors.Errorf("miner claims wrong number of wins: miner: %d, computed: %d", h.ElectionProof.WinCount, j)

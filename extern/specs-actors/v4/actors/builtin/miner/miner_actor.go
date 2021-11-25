@@ -634,7 +634,7 @@ func (a Actor) DisputeWindowedPoSt(rt Runtime, params *DisputeWindowedPoStParams
 func (a Actor) AddPos(rt Runtime, params *AddPosParams) *abi.EmptyValue {
 	rt.ValidateImmediateCallerAcceptAny()
 
-	code := rt.Send(builtin.BurntFundsActorAddr, builtin.MethodSend, nil, params.Pos, &builtin.Discard{})
+	code := rt.Send(rt.Receiver(), builtin.MethodSend, nil, params.Pos, &builtin.Discard{})
 	if !code.IsSuccess() {
 		rt.Log(rtt.ERROR, "failed to burn the pos funds, code: %v", code)
 	}

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
-	"github.com/filecoin-project/specs-actors/v5/actors/migration/nv13"
 	"runtime"
 	"sort"
 	"sync"
@@ -36,6 +35,8 @@ import (
 	"github.com/filecoin-project/specs-actors/v2/actors/migration/nv7"
 	"github.com/filecoin-project/specs-actors/v3/actors/migration/nv10"
 	"github.com/filecoin-project/specs-actors/v4/actors/migration/nv12"
+	"github.com/filecoin-project/specs-actors/v5/actors/migration/nv13"
+	"github.com/filecoin-project/specs-actors/v6/actors/migration/nv14"
 	"github.com/ipfs/go-cid"
 	cbor "github.com/ipfs/go-ipld-cbor"
 	"golang.org/x/xerrors"
@@ -208,14 +209,17 @@ func DefaultUpgradeSchedule() UpgradeSchedule {
 			StopWithin:      5,
 		}},
 		Expensive: true,
+	}, {
+		Height:    build.UpgradeActorsV5Height,
+		Network:   network.Version13,
+		Expensive: true,
+		Migration: UpgradeActorsV5,
+	}, {
+		Height:    build.UpgradeActorsV6Height,
+		Network:   network.Version14,
+		Expensive: true,
+		Migration: UpgradeActorsV6,
 	},
-		// delete for test
-		//{
-		//	Height:    build.UpgradeActorsV5Height,
-		//	Network:   network.Version13,
-		//	Expensive: true,
-		//	Migration: UpgradeActorsV5,
-		//},
 	}
 
 	for _, u := range updates {
@@ -684,7 +688,7 @@ func UpgradeFaucetBurnRecovery(ctx context.Context, sm *StateManager, _ Migratio
 	}
 
 	// Top up the reimbursement service
-	reimbAddr, err := address.NewFromString("t0111")
+	reimbAddr, err := address.NewFromString("k0111")
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("failed to parse reimbursement service address")
 	}
@@ -762,12 +766,12 @@ func UpgradeIgnition(ctx context.Context, sm *StateManager, _ MigrationCache, cb
 		return cid.Undef, xerrors.Errorf("setting network name: %w", err)
 	}
 
-	split1, err := address.NewFromString("t0115")
+	split1, err := address.NewFromString("k0115")
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("first split address: %w", err)
 	}
 
-	split2, err := address.NewFromString("t0116")
+	split2, err := address.NewFromString("k0116")
 	if err != nil {
 		return cid.Undef, xerrors.Errorf("second split address: %w", err)
 	}
@@ -1197,6 +1201,28 @@ func UpgradeActorsV5(ctx context.Context, sm *StateManager, cache MigrationCache
 	return newRoot, nil
 }
 
+func UpgradeActorsV6(ctx context.Context, sm *StateManager, cache MigrationCache, cb ExecCallback, root cid.Cid, epoch abi.ChainEpoch, ts *types.TipSet) (cid.Cid, error) {
+	// Use all the CPUs except 3.
+	workerCount := runtime.NumCPU() - 3
+	if workerCount <= 0 {
+		workerCount = 1
+	}
+
+	config := nv14.Config{
+		MaxWorkers:        uint(workerCount),
+		JobQueueSize:      1000,
+		ResultQueueSize:   100,
+		ProgressLogPeriod: 10 * time.Second,
+	}
+
+	newRoot, err := upgradeActorsV6Common(ctx, sm, cache, root, epoch, ts, config)
+	if err != nil {
+		return cid.Undef, xerrors.Errorf("migrating actors v4 state: %w", err)
+	}
+
+	return newRoot, nil
+}
+
 func PreUpgradeActorsV5(ctx context.Context, sm *StateManager, cache MigrationCache, root cid.Cid, epoch abi.ChainEpoch, ts *types.TipSet) error {
 	// Use half the CPUs for pre-migration, but leave at least 3.
 	workerCount := runtime.NumCPU()
@@ -1240,6 +1266,56 @@ func upgradeActorsV5Common(
 	// Persist the result.
 	newRoot, err := store.Put(ctx, &types.StateRoot{
 		Version: types.StateTreeVersion4,
+		Actors:  newHamtRoot,
+		Info:    stateRoot.Info,
+	})
+	if err != nil {
+		return cid.Undef, xerrors.Errorf("failed to persist new state root: %w", err)
+	}
+
+	// Persist the new tree.
+
+	{
+		from := buf
+		to := buf.Read()
+
+		if err := vm.Copy(ctx, from, to, newRoot); err != nil {
+			return cid.Undef, xerrors.Errorf("copying migrated tree: %w", err)
+		}
+	}
+
+	return newRoot, nil
+}
+func upgradeActorsV6Common(
+	ctx context.Context, sm *StateManager, cache MigrationCache,
+	root cid.Cid, epoch abi.ChainEpoch, ts *types.TipSet,
+	config nv14.Config,
+) (cid.Cid, error) {
+	buf := blockstore.NewTieredBstore(sm.cs.StateBlockstore(), blockstore.NewMemorySync())
+	store := store.ActorStore(ctx, buf)
+
+	// Load the state root.
+	var stateRoot types.StateRoot
+	if err := store.Get(ctx, root, &stateRoot); err != nil {
+		return cid.Undef, xerrors.Errorf("failed to decode state root: %w", err)
+	}
+
+	if stateRoot.Version != types.StateTreeVersion4 {
+		return cid.Undef, xerrors.Errorf(
+			"expected state root version 3 for actors v5 upgrade, got %d",
+			stateRoot.Version,
+		)
+	}
+
+	// Perform the migration
+	newHamtRoot, err := nv14.MigrateStateTree(ctx, store, stateRoot.Actors, epoch, config, migrationLogger{}, cache)
+	if err != nil {
+		return cid.Undef, xerrors.Errorf("upgrading to actors v2: %w", err)
+	}
+
+	// Persist the result.
+	newRoot, err := store.Put(ctx, &types.StateRoot{
+		Version: types.StateTreeVersion5,
 		Actors:  newHamtRoot,
 		Info:    stateRoot.Info,
 	})

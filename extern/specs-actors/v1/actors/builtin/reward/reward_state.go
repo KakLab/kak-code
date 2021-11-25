@@ -13,7 +13,8 @@ type Spacetime = big.Int
 
 // 36.266260308195979333 FIL
 // https://www.wolframalpha.com/input/?i=IntegerPart%5B330%2C000%2C000+*+%281+-+Exp%5B-Log%5B2%5D+%2F+%286+*+%281+year+%2F+30+seconds%29%29%5D%29+*+10%5E18%5D
-const InitialRewardPositionEstimateStr = "36266260308195979333"
+//const InitialRewardPositionEstimateStr = "36266260308195979333"
+const InitialRewardPositionEstimateStr = "225290404944853811"
 
 var InitialRewardPositionEstimate = big.MustFromString(InitialRewardPositionEstimateStr)
 

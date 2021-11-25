@@ -67,7 +67,7 @@ var mathSumCmd = &cli.Command{
 		&cli.StringFlag{
 			Name:  "format",
 			Value: "raw",
-			Usage: "format the number in a more readable way [kak,bytes2,bytes10]",
+			Usage: "format the number in a more readable way [kakh,bytes2,bytes10]",
 		},
 	},
 	Action: func(cctx *cli.Context) error {
@@ -90,7 +90,7 @@ var mathSumCmd = &cli.Command{
 			fmt.Printf("%s\n", types.SizeStr(val))
 		case "byte10":
 			fmt.Printf("%s\n", types.DeciStr(val))
-		case "kak":
+		case "kakh":
 			fmt.Printf("%s\n", types.FIL(val))
 		case "raw":
 			fmt.Printf("%s\n", val)

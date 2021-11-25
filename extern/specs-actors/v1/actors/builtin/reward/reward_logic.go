@@ -35,7 +35,9 @@ var BaselineExponentV3 = big.MustFromString("34028259129864107846596418992631347
 // 1EiB
 var BaselineInitialValueV0 = big.Lsh(big.NewInt(1), 60) // Q.0
 // 2.5057116798121726 EiB
-var BaselineInitialValueV3 = big.NewInt(2_888_888_880_000_000_000) // Q.0
+//var BaselineInitialValueV3 = big.NewInt(2_888_888_880_000_000_000) // Q.0
+var BaselineInitialValueV3 = big.NewInt(2_000_000) // Q.0
+
 
 
 // Initialize baseline power for epoch -1 so that baseline power at epoch 0 is
@@ -58,8 +60,10 @@ func BaselinePowerFromPrev(prevEpochBaselinePower abi.StoragePower, nv network.V
 }
 
 // These numbers are placeholders, but should be in units of attoFIL, 10^-18 FIL
-var SimpleTotal = big.Mul(big.NewInt(330e6), big.NewInt(1e18))   // 330M for testnet, PARAM_FINISH
-var BaselineTotal = big.Mul(big.NewInt(770e6), big.NewInt(1e18)) // 770M for testnet, PARAM_FINISH
+//var SimpleTotal = big.Mul(big.NewInt(330e6), big.NewInt(1e18))   // 330M for testnet, PARAM_FINISH
+//var BaselineTotal = big.Mul(big.NewInt(770e6), big.NewInt(1e18)) // 770M for testnet, PARAM_FINISH
+var SimpleTotal = big.Mul(big.NewInt(2050000), big.NewInt(1e18))   // 330M for testnet, PARAM_FINISH
+var BaselineTotal = big.Mul(big.NewInt(11450000), big.NewInt(1e18)) // 770M for testnet, PARAM_FINISH
 
 // Computes RewardTheta which is is precise fractional value of effectiveNetworkTime.
 // The effectiveNetworkTime is defined by CumsumBaselinePower(theta) == CumsumRealizedPower

@@ -158,6 +158,7 @@ func (a Actor) CreateMiner(rt Runtime, params *CreateMinerParams) *CreateMinerRe
 type UpdateClaimedPowerParams struct {
 	RawByteDelta         abi.StoragePower
 	QualityAdjustedDelta abi.StoragePower
+	KakTatolSector       abi.SectorSize
 }
 
 // Adds or removes claimed power for the calling actor.

@@ -885,7 +885,7 @@ func (t *EnrollCronEventParams) UnmarshalCBOR(r io.Reader) error {
 	return nil
 }
 
-var lengthBufUpdateClaimedPowerParams = []byte{130}
+var lengthBufUpdateClaimedPowerParams = []byte{131}
 
 func (t *UpdateClaimedPowerParams) MarshalCBOR(w io.Writer) error {
 	if t == nil {
@@ -896,6 +896,8 @@ func (t *UpdateClaimedPowerParams) MarshalCBOR(w io.Writer) error {
 		return err
 	}
 
+	scratch := make([]byte, 9)
+
 	// t.RawByteDelta (big.Int) (struct)
 	if err := t.RawByteDelta.MarshalCBOR(w); err != nil {
 		return err
@@ -905,6 +907,13 @@ func (t *UpdateClaimedPowerParams) MarshalCBOR(w io.Writer) error {
 	if err := t.QualityAdjustedDelta.MarshalCBOR(w); err != nil {
 		return err
 	}
+
+	// t.KakTatolSector (abi.SectorSize) (uint64)
+
+	if err := cbg.WriteMajorTypeHeaderBuf(scratch, w, cbg.MajUnsignedInt, uint64(t.KakTatolSector)); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -922,7 +931,7 @@ func (t *UpdateClaimedPowerParams) UnmarshalCBOR(r io.Reader) error {
 		return fmt.Errorf("cbor input should be of type array")
 	}
 
-	if extra != 2 {
+	if extra != 3 {
 		return fmt.Errorf("cbor input had wrong number of fields")
 	}
 
@@ -942,6 +951,20 @@ func (t *UpdateClaimedPowerParams) UnmarshalCBOR(r io.Reader) error {
 		if err := t.QualityAdjustedDelta.UnmarshalCBOR(br); err != nil {
 			return xerrors.Errorf("unmarshaling t.QualityAdjustedDelta: %w", err)
 		}
+
+	}
+	// t.KakTatolSector (abi.SectorSize) (uint64)
+
+	{
+
+		maj, extra, err = cbg.CborReadHeaderBuf(br, scratch)
+		if err != nil {
+			return err
+		}
+		if maj != cbg.MajUnsignedInt {
+			return fmt.Errorf("wrong type for uint64 field")
+		}
+		t.KakTatolSector = abi.SectorSize(extra)
 
 	}
 	return nil

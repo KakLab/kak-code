@@ -79,7 +79,7 @@ func MakeGenesis(outFile, genesisTemplate string) func(bs dtypes.ChainBlockstore
 				return nil, xerrors.Errorf("make genesis block: %w", err)
 			}
 
-			fmt.Printf("GENESIS MINER ADDRESS: t0%d\n", genesis2.MinerStart)
+			fmt.Printf("GENESIS MINER ADDRESS: k0%d\n", genesis2.MinerStart)
 
 			f, err := os.OpenFile(outFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 			if err != nil {

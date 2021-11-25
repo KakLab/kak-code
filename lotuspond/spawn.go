@@ -56,7 +56,7 @@ func (api *api) Spawn() (nodeInfo, error) {
 		if err := seed.WriteGenesisMiner(genMiner, sbroot, genm, ki); err != nil {
 			return nodeInfo{}, xerrors.Errorf("failed to write genminer info: %w", err)
 		}
-		params = append(params, "--import-key="+filepath.Join(dir, "preseal", "pre-seal-t01000.key"))
+		params = append(params, "--import-key="+filepath.Join(dir, "preseal", "pre-seal-k01000.key"))
 		params = append(params, "--genesis-template="+filepath.Join(dir, "preseal", "genesis-template.json"))
 
 		// Create template
@@ -169,7 +169,7 @@ func (api *api) SpawnStorage(fullNodeRepo string) (nodeInfo, error) {
 	initArgs := []string{"init", "--nosync"}
 	if fullNodeRepo == api.running[1].meta.Repo {
 		presealPrefix := filepath.Join(fullNodeRepo, "preseal")
-		initArgs = []string{"init", "--actor=t01000", "--genesis-miner", "--pre-sealed-sectors=" + presealPrefix, "--pre-sealed-metadata=" + filepath.Join(presealPrefix, "pre-seal-t01000.json")}
+		initArgs = []string{"init", "--actor=k01000", "--genesis-miner", "--pre-sealed-sectors=" + presealPrefix, "--pre-sealed-metadata=" + filepath.Join(presealPrefix, "pre-seal-k01000.json")}
 	}
 
 	id := atomic.AddInt32(&api.cmds, 1)

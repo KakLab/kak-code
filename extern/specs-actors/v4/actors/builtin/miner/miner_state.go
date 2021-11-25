@@ -983,7 +983,12 @@ func (st *State) CheckVestedFunds(store adt.Store, currEpoch abi.ChainEpoch) (ab
 // Unclaimed funds that are not locked -- includes free funds and does not
 // account for fee debt.  Always greater than or equal to zero
 func (st *State) GetUnlockedBalance(actorBalance abi.TokenAmount) (abi.TokenAmount, error) {
-	unlockedBalance := big.Subtract(actorBalance, st.LockedFunds, st.PreCommitDeposits, st.InitialPledge)
+	unlockedBalance := big.Subtract(actorBalance, st.LockedFunds, st.PreCommitDeposits, st.InitialPledge,st.PosDeposits)
+	if unlockedBalance.LessThan(big.Zero()) {
+		// k0100 miner not have enought balance
+		unlockedBalance = big.Subtract(actorBalance, st.LockedFunds, st.PreCommitDeposits, st.InitialPledge)
+	}
+
 	if unlockedBalance.LessThan(big.Zero()) {
 		return big.Zero(), xerrors.Errorf("negative unlocked balance %v", unlockedBalance)
 	}

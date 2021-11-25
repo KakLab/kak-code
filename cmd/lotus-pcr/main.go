@@ -122,7 +122,7 @@ var findMinersCmd = &cli.Command{
    account balances can be included by enabling them through the flags.
 
    Examples
-   Find all miners with an available balance below 100 KAK
+   Find all miners with an available balance below 100 KAKH
 
      lotus-pcr find-miners --threshold 100
 
@@ -202,7 +202,7 @@ var findMinersCmd = &cli.Command{
 
 var recoverMinersCmd = &cli.Command{
 	Name:  "recover-miners",
-	Usage: "Ensure all miners with a negative available balance have a KAK surplus across accounts",
+	Usage: "Ensure all miners with a negative available balance have a KAKH surplus across accounts",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:    "from",
@@ -227,13 +227,13 @@ var recoverMinersCmd = &cli.Command{
 		&cli.IntFlag{
 			Name:    "miner-recovery-cutoff",
 			EnvVars: []string{"LOTUS_PCR_MINER_RECOVERY_CUTOFF"},
-			Usage:   "maximum amount of KAK that can be sent to any one miner before refund percent is applied",
+			Usage:   "maximum amount of KAKH that can be sent to any one miner before refund percent is applied",
 			Value:   3000,
 		},
 		&cli.IntFlag{
 			Name:    "miner-recovery-bonus",
 			EnvVars: []string{"LOTUS_PCR_MINER_RECOVERY_BONUS"},
-			Usage:   "additional KAK to send to each miner",
+			Usage:   "additional KAKH to send to each miner",
 			Value:   5,
 		},
 		&cli.IntFlag{
@@ -393,13 +393,13 @@ var runCmd = &cli.Command{
 		&cli.IntFlag{
 			Name:    "miner-recovery-cutoff",
 			EnvVars: []string{"LOTUS_PCR_MINER_RECOVERY_CUTOFF"},
-			Usage:   "maximum amount of KAK that can be sent to any one miner before refund percent is applied",
+			Usage:   "maximum amount of KAKH that can be sent to any one miner before refund percent is applied",
 			Value:   3000,
 		},
 		&cli.IntFlag{
 			Name:    "miner-recovery-bonus",
 			EnvVars: []string{"LOTUS_PCR_MINER_RECOVERY_BONUS"},
-			Usage:   "additional KAK to send to each miner",
+			Usage:   "additional KAKH to send to each miner",
 			Value:   5,
 		},
 		&cli.IntFlag{

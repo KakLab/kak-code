@@ -2,7 +2,6 @@ package vm
 
 import (
 	"context"
-	builtin5 "github.com/filecoin-project/specs-actors/v5/actors/builtin"
 
 	"github.com/filecoin-project/go-state-types/network"
 
@@ -19,6 +18,8 @@ import (
 	builtin2 "github.com/filecoin-project/specs-actors/v2/actors/builtin"
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
+	builtin5 "github.com/filecoin-project/specs-actors/v5/actors/builtin"
+	builtin6 "github.com/filecoin-project/specs-actors/v6/actors/builtin"
 
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/lotus/chain/actors/aerrors"
@@ -108,6 +109,8 @@ func newAccountActor(ver actors.Version) *types.Actor {
 		code = builtin4.AccountActorCodeID
 	case actors.Version5:
 		code = builtin5.AccountActorCodeID
+	case actors.Version6:
+		code = builtin6.AccountActorCodeID
 	default:
 		panic("unsupported actors version")
 	}

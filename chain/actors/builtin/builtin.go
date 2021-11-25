@@ -12,6 +12,7 @@ import (
 	builtin3 "github.com/filecoin-project/specs-actors/v3/actors/builtin"
 	builtin4 "github.com/filecoin-project/specs-actors/v4/actors/builtin"
 	builtin5 "github.com/filecoin-project/specs-actors/v5/actors/builtin"
+	builtin6 "github.com/filecoin-project/specs-actors/v6/actors/builtin"
 
 	"github.com/filecoin-project/lotus/chain/actors/adt"
 	"github.com/filecoin-project/lotus/chain/types"
@@ -23,14 +24,15 @@ import (
 	smoothing3 "github.com/filecoin-project/specs-actors/v3/actors/util/smoothing"
 	smoothing4 "github.com/filecoin-project/specs-actors/v4/actors/util/smoothing"
 	smoothing5 "github.com/filecoin-project/specs-actors/v5/actors/util/smoothing"
+	smoothing6 "github.com/filecoin-project/specs-actors/v6/actors/util/smoothing"
 )
 
 var SystemActorAddr = builtin0.SystemActorAddr
 var BurntFundsActorAddr = builtin0.BurntFundsActorAddr
 var CronActorAddr = builtin0.CronActorAddr
-var SaftAddress = makeAddress("t0122")
-var ReserveAddress = makeAddress("t090")
-var RootVerifierAddress = makeAddress("t080")
+var SaftAddress = makeAddress("k0122")
+var ReserveAddress = makeAddress("k090")
+var RootVerifierAddress = makeAddress("k080")
 
 var (
 	ExpectedLeadersPerEpoch = builtin0.ExpectedLeadersPerEpoch
@@ -78,6 +80,10 @@ func FromV5FilterEstimate(v5 smoothing5.FilterEstimate) FilterEstimate {
 	return (FilterEstimate)(v5)
 }
 
+func FromV6FilterEstimate(v6 smoothing6.FilterEstimate) FilterEstimate {
+	return (FilterEstimate)(v6)
+}
+
 type ActorStateLoader func(store adt.Store, root cid.Cid) (cbor.Marshaler, error)
 
 var ActorStateLoaders = make(map[cid.Cid]ActorStateLoader)
@@ -106,6 +112,8 @@ func ActorNameByCode(c cid.Cid) string {
 		return builtin4.ActorNameByCode(c)
 	case builtin5.IsBuiltinActor(c):
 		return builtin5.ActorNameByCode(c)
+	case builtin6.IsBuiltinActor(c):
+		return builtin6.ActorNameByCode(c)
 	default:
 		return "<unknown>"
 	}
@@ -116,7 +124,8 @@ func IsBuiltinActor(c cid.Cid) bool {
 		builtin2.IsBuiltinActor(c) ||
 		builtin3.IsBuiltinActor(c) ||
 		builtin4.IsBuiltinActor(c) ||
-		builtin5.IsBuiltinActor(c)
+		builtin5.IsBuiltinActor(c) ||
+		builtin6.IsBuiltinActor(c)
 }
 
 func IsAccountActor(c cid.Cid) bool {
@@ -124,7 +133,8 @@ func IsAccountActor(c cid.Cid) bool {
 		c == builtin2.AccountActorCodeID ||
 		c == builtin3.AccountActorCodeID ||
 		c == builtin4.AccountActorCodeID ||
-		c == builtin5.AccountActorCodeID
+		c == builtin5.AccountActorCodeID ||
+		c == builtin6.AccountActorCodeID
 }
 
 func IsStorageMinerActor(c cid.Cid) bool {
@@ -132,7 +142,8 @@ func IsStorageMinerActor(c cid.Cid) bool {
 		c == builtin2.StorageMinerActorCodeID ||
 		c == builtin3.StorageMinerActorCodeID ||
 		c == builtin4.StorageMinerActorCodeID ||
-		c == builtin5.StorageMinerActorCodeID
+		c == builtin5.StorageMinerActorCodeID ||
+		c == builtin6.StorageMinerActorCodeID
 }
 
 func IsMultisigActor(c cid.Cid) bool {
@@ -140,7 +151,8 @@ func IsMultisigActor(c cid.Cid) bool {
 		c == builtin2.MultisigActorCodeID ||
 		c == builtin3.MultisigActorCodeID ||
 		c == builtin4.MultisigActorCodeID ||
-		c == builtin5.MultisigActorCodeID
+		c == builtin5.MultisigActorCodeID ||
+		c == builtin6.MultisigActorCodeID
 }
 
 func IsPaymentChannelActor(c cid.Cid) bool {
@@ -148,7 +160,8 @@ func IsPaymentChannelActor(c cid.Cid) bool {
 		c == builtin2.PaymentChannelActorCodeID ||
 		c == builtin3.PaymentChannelActorCodeID ||
 		c == builtin4.PaymentChannelActorCodeID ||
-		c == builtin5.PaymentChannelActorCodeID
+		c == builtin5.PaymentChannelActorCodeID ||
+		c == builtin6.PaymentChannelActorCodeID
 }
 
 func makeAddress(addr string) address.Address {

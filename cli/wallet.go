@@ -516,7 +516,7 @@ var walletMarket = &cli.Command{
 var walletMarketWithdraw = &cli.Command{
 	Name:      "withdraw",
 	Usage:     "Withdraw funds from the Storage Market Actor",
-	ArgsUsage: "[amount (KAK) optional, otherwise will withdraw max available]",
+	ArgsUsage: "[amount (KAKH) optional, otherwise will withdraw max available]",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:    "wallet",

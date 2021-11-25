@@ -40,15 +40,21 @@ var UpgradeNorwegianHeight = abi.ChainEpoch(40)
 var UpgradeActorsV4Height = abi.ChainEpoch(45)
 
 // for kak miner
-var UpgradeActorsV5Height = abi.ChainEpoch(55)
-
+// release 13881
+var UpgradeActorsV5Height = abi.ChainEpoch(13881)
+var UpgradeActorsV6Height = abi.ChainEpoch(157820)
+const BlockDelaySecs = uint64(30)
+//test 55
+//var UpgradeActorsV5Height = abi.ChainEpoch(55)
+//var UpgradeActorsV6Height = abi.ChainEpoch(65)
+//const BlockDelaySecs = uint64(4)
 
 var DrandSchedule = map[abi.ChainEpoch]DrandEnum{
 	0: DrandMainnet,
 }
 
 func init() {
-	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1,abi.RegisteredSealProof_StackedDrg8GiBV1)
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1,abi.RegisteredSealProof_StackedDrg512MiBV1,abi.RegisteredSealProof_StackedDrg8GiBV1)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
 	policy.SetPreCommitChallengeDelay(abi.ChainEpoch(10))
@@ -83,11 +89,12 @@ func init() {
 	UpgradeNorwegianHeight = getUpgradeHeight("LOTUS_NORWEGIAN_HEIGHT", UpgradeNorwegianHeight)
 	UpgradeActorsV4Height = getUpgradeHeight("LOTUS_ACTORSV4_HEIGHT", UpgradeActorsV4Height)
 	UpgradeActorsV5Height = getUpgradeHeight("LOTUS_ACTORSV5_HEIGHT", UpgradeActorsV5Height)
+	UpgradeActorsV6Height = getUpgradeHeight("LOTUS_ACTORSV5_HEIGHT", UpgradeActorsV6Height)
 
 	BuildType |= Build2k
 }
 
-const BlockDelaySecs = uint64(30)
+
 
 const PropagationDelaySecs = uint64(1)
 

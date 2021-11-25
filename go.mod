@@ -48,6 +48,7 @@ require (
 	github.com/filecoin-project/specs-actors/v3 v3.1.0
 	github.com/filecoin-project/specs-actors/v4 v4.0.0
 	github.com/filecoin-project/specs-actors/v5 v5.0.0
+	github.com/filecoin-project/specs-actors/v6 v6.0.1 // indirect
 	github.com/filecoin-project/specs-storage v0.1.1-0.20201105051918-5188d9774506
 	github.com/filecoin-project/test-vectors/schema v0.0.5
 	github.com/gbrlsnchs/jwt/v3 v3.0.0-beta.1
@@ -177,3 +178,7 @@ replace github.com/filecoin-project/specs-actors/v3 => ./extern/specs-actors/v3
 replace github.com/filecoin-project/specs-actors/v4 => ./extern/specs-actors/v4
 
 replace github.com/filecoin-project/specs-actors/v5 => ./extern/specs-actors/v5
+
+replace github.com/filecoin-project/specs-actors/v6 => ./extern/specs-actors/v6
+
+replace github.com/filecoin-project/go-address => ./extern/go-address

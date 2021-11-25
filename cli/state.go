@@ -1150,7 +1150,7 @@ var compStateMsg = `
  </a>
  </div>
 
- <div><b>{{.Msg.From}}</b> -&gt; <b>{{.Msg.To}}</b> ({{ToFil .Msg.Value}} KAK), M{{.Msg.Method}}</div>
+ <div><b>{{.Msg.From}}</b> -&gt; <b>{{.Msg.To}}</b> ({{ToFil .Msg.Value}} KAKH), M{{.Msg.Method}}</div>
  {{if not .Subcall}}<div><small>Msg CID: {{.Msg.Cid}}</small></div>{{end}}
  {{if gt (len .Msg.Params) 0}}
   <div><pre class="params">{{JsonParams ($code) (.Msg.Method) (.Msg.Params) | html}}</pre></div>
@@ -1595,7 +1595,7 @@ func formatOutput(t string, val []byte) (string, error) {
 	case "big", "int", "bigint":
 		bi := types.BigFromBytes(val)
 		return bi.String(), nil
-	case "kak":
+	case "kakh":
 		bi := types.FIL(types.BigFromBytes(val))
 		return bi.String(), nil
 	case "pid", "peerid", "peer":

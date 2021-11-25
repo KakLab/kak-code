@@ -53,12 +53,12 @@ func TestStore(t *testing.T) {
 	addrs, err = store.ListChannels()
 	require.NoError(t, err)
 	require.Len(t, addrs, 2)
-	t0100, err := address.NewIDAddress(100)
+	k0100, err := address.NewIDAddress(100)
 	require.NoError(t, err)
-	t0200, err := address.NewIDAddress(200)
+	k0200, err := address.NewIDAddress(200)
 	require.NoError(t, err)
-	require.Contains(t, addrs, t0100)
-	require.Contains(t, addrs, t0200)
+	require.Contains(t, addrs, k0100)
+	require.Contains(t, addrs, k0200)
 
 	// Request vouchers for channel
 	vouchers, err := store.VouchersForPaych(*ci.Channel)

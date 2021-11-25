@@ -74,7 +74,7 @@ func RunMultisigTest(t *testing.T, cmds []*lcli.Command, clientNode test.TestNod
 	fmt.Println(out)
 
 	// Expect correct balance
-	require.Regexp(t, regexp.MustCompile("Balance: 0.000000000000001 KAK"), out)
+	require.Regexp(t, regexp.MustCompile("Balance: 0.000000000000001 KAKH"), out)
 	// Expect 1 transaction
 	require.Regexp(t, regexp.MustCompile(`Transactions:\s*1`), out)
 	// Expect transaction to be "AddSigner"

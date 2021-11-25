@@ -25,6 +25,8 @@ func Message(version actors.Version, from address.Address) MessageBuilder {
 		return message4{from}
 	case actors.Version5:
 		return message5{from}
+	case actors.Version6:
+		return message6{from}
 	default:
 		panic(fmt.Sprintf("unsupported actors version: %d", version))
 	}
