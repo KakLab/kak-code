@@ -315,7 +315,8 @@ type VestSpec struct {
 // The vesting schedule for total rewards (block reward + gas reward) earned by a block producer.
 var RewardVestingSpec = VestSpec{ // PARAM_SPEC
 	InitialDelay: abi.ChainEpoch(0),
-	VestPeriod:   abi.ChainEpoch(180 * builtin.EpochsInDay),
+	//VestPeriod:   abi.ChainEpoch(180 * builtin.EpochsInDay),
+	VestPeriod:   abi.ChainEpoch(360* builtin.EpochsInDay),
 	StepDuration: abi.ChainEpoch(1 * builtin.EpochsInDay),
 	Quantization: 12 * builtin.EpochsInHour,
 }
